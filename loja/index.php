@@ -1,4 +1,14 @@
-<?php require_once '../utils/init.php'; ?>
+<?php
+require_once '../utils/init.php';
+
+if (!isset($_SESSION['logged'])) {
+    header('Location: login.php');
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
