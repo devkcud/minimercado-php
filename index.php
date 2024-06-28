@@ -1,4 +1,14 @@
-<?php require_once './utils/init.php'; ?>
+<?php
+require_once './utils/init.php';
+
+if (!isset($_SESSION['logged'])) {
+    header('Location: ../login.php');
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../login.php');
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,19 +23,10 @@
     <h1>Meus Produtos (<a href="loja/index.php">Ver loja</a>)</h1>
 
     <?php
-    if (!isset($_SESSION['logged'])) {
-        echo '<a href="login.php">Login</a>';
-        echo '<br>';
-        echo '<a href="register.php">Register</a>';
-        return;
-    }
-
-    if (!isset($_SESSION['user_id'])) {
-        return;
-    }
-
-    $name = $db->query("SELECT name FROM person WHERE id = " . $_SESSION['user_id']);
-    $name = $name->fetch_assoc()['name'];
+    $name = $db->prepare("SELECT name FROM person WHERE id = ?");
+    $name->bind_param('i', $_SESSION['user_id']);
+    $name->execute();
+    $name = $name->get_result()->fetch_assoc()['name'];
 
     echo 'Bem-vindo, ' . $name . '! ';
 
@@ -38,7 +39,10 @@
     <br>
 
     <?php
-    $products = $db->query("SELECT * FROM product WHERE owner_id = " . $_SESSION['user_id']);
+    $products = $db->prepare("SELECT * FROM product WHERE owner_id = ?");
+    $products->bind_param('i', $_SESSION['user_id']);
+    $products->execute();
+    $products = $products->get_result();
 
     if ($products->num_rows == 0) {
         echo 'Nenhum produto encontrado.';

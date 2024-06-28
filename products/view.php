@@ -12,7 +12,10 @@
 <body>
 
     <?php
-    $product = $db->query("SELECT * FROM product WHERE id = " . $_GET['id'])->fetch_assoc();
+    $product = $db->prepare("SELECT * FROM product WHERE id = ?");
+    $product->bind_param('i', $_GET['id']);
+    $product->execute();
+    $product = $product->get_result()->fetch_assoc();
 
     if (!$product) {
         echo 'Product not found.';

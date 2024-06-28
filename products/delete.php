@@ -17,13 +17,18 @@ if (!isset($_GET['id'])) {
 
 // Check if product is from the current user
 
-$product = $db->query("SELECT owner_id FROM product WHERE id = " . $_GET['id'])->fetch_assoc();
+$product = $db->prepare("SELECT owner_id FROM product WHERE id = ?");
+$product->bind_param('i', $_GET['id']);
+$product->execute();
+$product = $product->get_result()->fetch_assoc();
 
 if ($product['owner_id'] != $_SESSION['user_id']) {
     header('Location: ../index.php');
     return;
 }
 
-$db->query("DELETE FROM product WHERE id = " . $_GET['id']);
+$stmt = $db->prepare("DELETE FROM product WHERE id = ?");
+$stmt->bind_param('i', $_GET['id']);
+$stmt->execute();
 
 header('Location: ../index.php');

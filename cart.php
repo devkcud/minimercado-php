@@ -24,9 +24,11 @@ if (!isset($_SESSION['logged'])) {
 
     if (count($_SESSION['cart']) > 0) {
         foreach ($_SESSION['cart'] as $product) {
-            $productfromdb = $db->query("SELECT * FROM product WHERE id = " . $product);
+            $productfromdb = $db->prepare("SELECT * FROM product WHERE id = ?");
+            $productfromdb->bind_param('i', $product);
+            $productfromdb->execute();
+            $productfromdb = $productfromdb->get_result()->fetch_assoc();
 
-            $productfromdb = $productfromdb->fetch_assoc();
             $priceTotal += $productfromdb['price'];
 
             echo $productfromdb['name'] . ' - R$' . $productfromdb['price'] . '<br>';
