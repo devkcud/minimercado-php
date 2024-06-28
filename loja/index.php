@@ -12,7 +12,7 @@
 <body>
     <h1>Loja (<a href="../index.php">Meus Produtos</a>)</h1>
 
-    <a href="logout.php">Logout</a>
+    <a href="../logout.php">Logout</a>
     <br>
     <a href="../cart.php">Carrinho (<?= count($_SESSION['cart']) ?>)</a>
 
