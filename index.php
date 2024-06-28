@@ -2,11 +2,11 @@
 require_once './utils/init.php';
 
 if (!isset($_SESSION['logged'])) {
-    header('Location: ../login.php');
+    header('Location: ./login.php');
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ../login.php');
+    header('Location: ./login.php');
 }
 ?>
 
